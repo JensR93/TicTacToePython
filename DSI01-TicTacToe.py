@@ -36,21 +36,15 @@ def checkEnableSpielernameZwei():
 
 #Wenn es keinen Gewinner gibt wird der Aktuelle Spieler gewechselt
 def spielerWechselObjekt():
-    global AktuellerSpielerObjekt,lblAktuellerSpielerName
+    global AktuellerSpielerObjekt
     if pruefeGewinner():
         messagebox.showinfo("Gewinner!","Gewinner "+AktuellerSpielerObjekt.name+"!")
         return
     if AktuellerSpielerObjekt== TicTacToePlayer1:
-        lblAktuellerSpielerName
         AktuellerSpielerObjekt=TicTacToePlayer2
-        lblAktuellerSpielerName['text']=AktuellerSpielerObjekt.name
-        #wert = messagebox.showinfo('Neues Spiel?','Switch1')
         return
     if AktuellerSpielerObjekt== TicTacToePlayer2:
         AktuellerSpielerObjekt=TicTacToePlayer1
-        
-        lblAktuellerSpielerName['text']=AktuellerSpielerObjekt.name
-        #wert = messagebox.showinfo('Neues Spiel?','Switch2')
         return 
 
 #prüft ob es einen Gewinner gibt
@@ -83,7 +77,6 @@ def mouseClickinEntry(event,widget):
         starteNeuesSpiel()
         return
     
-    # Hier die Logik des Spiels einbauen :)
     if widget== 'lbl1':
         if lbl1['text']=="1":
             lbl1.config(text=AktuellerSpielerObjekt.char)
@@ -151,15 +144,15 @@ def mouseClickinEntry(event,widget):
 #Erstellt bei Programmstart, Nach Button Klick "Neues Spiel starten" und am Ende des Spiels ein neues Spielfeld
 def CreateNewGameGuiLayout():
     global lbl1,lbl2,lbl3,lbl4,lbl5,lbl6,lbl7,lbl8,lbl9,spielFrame
-    lbl1 = Label(spielFrame,text="1",bg="yellow",fg="blue",font=("Helvetica",32))
-    lbl2 = Label(spielFrame,text="2",bg="yellow",fg="blue",font=("Helvetica",32))
-    lbl3 = Label(spielFrame,text="3",bg="yellow",fg="blue",font=("Helvetica",32))
-    lbl4 = Label(spielFrame,text="4",bg="yellow",fg="blue",font=("Helvetica",32))
-    lbl5 = Label(spielFrame,text="5",bg="yellow",fg="blue",font=("Helvetica",32))
-    lbl6 = Label(spielFrame,text="6",bg="yellow",fg="blue",font=("Helvetica",32))
-    lbl7 = Label(spielFrame,text="7",bg="yellow",fg="blue",font=("Helvetica",32))
-    lbl8 = Label(spielFrame,text="8",bg="yellow",fg="blue",font=("Helvetica",32))
-    lbl9 = Label(spielFrame,text="9",bg="yellow",fg="blue",font=("Helvetica",32))
+    lbl1 = Label(spielFrame,text="1",fg="blue",font=("Helvetica",32))
+    lbl2 = Label(spielFrame,text="2",fg="blue",font=("Helvetica",32))
+    lbl3 = Label(spielFrame,text="3",fg="blue",font=("Helvetica",32))
+    lbl4 = Label(spielFrame,text="4",fg="blue",font=("Helvetica",32))
+    lbl5 = Label(spielFrame,text="5",fg="blue",font=("Helvetica",32))
+    lbl6 = Label(spielFrame,text="6",fg="blue",font=("Helvetica",32))
+    lbl7 = Label(spielFrame,text="7",fg="blue",font=("Helvetica",32))
+    lbl8 = Label(spielFrame,text="8",fg="blue",font=("Helvetica",32))
+    lbl9 = Label(spielFrame,text="9",fg="blue",font=("Helvetica",32))
 
     lbl1.grid(row = 0, column = 0)
     lbl2.grid(row = 0, column = 1)
@@ -214,9 +207,6 @@ def CreateProgramStartLayout():
     btnSpielStarten = Button(HeaderFrame,text="Spiel beginnen",font=("Helvetica",12),command=starteNeuesSpiel)
     btnSpielStarten.grid(row=2,column=0)
 
-
-    
-    
 
 
 #endregion
