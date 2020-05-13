@@ -1,9 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from Application import *
-from Datenbank import *
 from TicTacToePlayer import *
-import time 
 
 DEFAULTPLAYERNAME1 = "Player 1"
 DEFAULTPLAYERCHAR1 = "X"
@@ -18,10 +16,14 @@ def spielerEingabe():
 
 #Startet ein neues Spiel mit Messagebox Abfrage
 def starteNeuesSpiel():
+    global spielFrame
     wert = messagebox.askquestion('Neues Spiel?','Möchten sie ein neues Spiel beginnen?')
     if wert=='yes':
-        spielFrame.grid_forget()
+       #Clean Ressource
+        for widget in spielFrame.winfo_children():
+           widget.destroy()
         spielFrame.grid(row=1)
+        
         CreateNewGameGuiLayout()
         return TRUE
     else:
@@ -29,10 +31,14 @@ def starteNeuesSpiel():
     
 #Checkbox die das verändern des Spielernamens und Zeichens von Spieler2 erlauben
 def checkEnableSpielernameZwei():
+    global checkboxSpielerZweiEnabled,eingabeSpielernameZwei,eingabeSpielerZeichenZwei
     if checkboxSpielerZweiEnabled.get():
         eingabeSpielernameZwei.config(state='normal')
+        eingabeSpielerZeichenZwei.config(state='normal')
     else:
         eingabeSpielernameZwei.config(state='disabled')
+        eingabeSpielerZeichenZwei.config(state='disabled')
+
 
 #Wenn es keinen Gewinner gibt wird der Aktuelle Spieler gewechselt
 def spielerWechselObjekt():
@@ -173,9 +179,26 @@ def CreateNewGameGuiLayout():
     lbl7.bind("<Button-1>", lambda event: mouseClickinEntry(event, "lbl7"))
     lbl8.bind("<Button-1>", lambda event: mouseClickinEntry(event, "lbl8"))
     lbl9.bind("<Button-1>", lambda event: mouseClickinEntry(event, "lbl9"))    
-
+def callbackPlayerName1Change():
+    global sv1
+    TicTacToePlayer1.name=sv1.get()
+    return True
+def callbackPlayerChar1Change():
+    global sv2
+    TicTacToePlayer1.char=sv2.get()
+    return True
+def callbackPlayerName2Change():
+    global sv3
+    TicTacToePlayer2.name=sv3.get()
+    return True
+def callbackPlayerChar2Change():
+    global sv4
+    TicTacToePlayer2.char=sv4.get()
+    return True
 def CreateProgramStartLayout():
-    global root,HeaderFrame,spielFrame,FooterFrame, AktuellerSpielerObjekt,lblAktuellerSpielerName,HeaderFrame,spielFrame,lblSpielername
+    global root,HeaderFrame,sv1,sv2,sv3,sv4,spielFrame,FooterFrame
+    global AktuellerSpielerObjekt,lblAktuellerSpielerName,HeaderFrame,spielFrame,lblSpielername
+    global checkboxSpielerZweiEnabled, eingabeSpielernameZwei ,eingabeSpielerZeichenZwei 
     root = Tk()
     root.title("Tic Tac Toe v.1.0.0")
     HeaderFrame = Frame(root,width=300, height = 200)
@@ -184,23 +207,35 @@ def CreateProgramStartLayout():
     spielFrame.grid(row=1)
     lblSpielername = Label(HeaderFrame,text="Spielername eingeben",font=("Helvetica",12))
     lblSpielername.grid(row=0,column=0)
-    eingabeSpielernameEins = Entry(HeaderFrame,font=("Helvetica",12),fg="red",width=10,textvariable=TicTacToePlayer1.name)
+    sv1 = StringVar()
+    sv2 = StringVar()
+    sv3 = StringVar()
+    sv4 = StringVar()
+    eingabeSpielernameEins=Entry(HeaderFrame, font=("Helvetica",12),fg="red",textvariable=sv1, width=10,validate="focusout", validatecommand=callbackPlayerName1Change)
+    
+    eingabeSpielerZeichenEins=Entry(HeaderFrame, font=("Helvetica",12),fg="red",textvariable=sv2, width=10,validate="focusout", validatecommand=callbackPlayerChar1Change)
+    #eingabeSpielernameEins = Entry(HeaderFrame,font=("Helvetica",12),fg="red",width=10,textvariable=TicTacToePlayer1.name)
+    
     eingabeSpielernameEins.insert(0,TicTacToePlayer1.name)
     eingabeSpielernameEins.grid(row=0,column=1)
-    eingabeSpielerZeichenEins = Entry(HeaderFrame,font=("Helvetica",12),fg="red",width=10,textvariable=TicTacToePlayer1.char)
     eingabeSpielerZeichenEins.insert(0,TicTacToePlayer1.char)
     eingabeSpielerZeichenEins.grid(row=0,column=2)
-    eingabeSpielernameZwei = Entry(HeaderFrame,font=("Helvetica",12),fg="red",width=10,state='normal',textvariable=TicTacToePlayer2.name)
+    
+  
+    
+    #eingabeSpielernameZwei = Entry(HeaderFrame,font=("Helvetica",12),fg="red",width=10,state='normal',textvariable=TicTacToePlayer2.name)
+    
+    eingabeSpielernameZwei=Entry(HeaderFrame, font=("Helvetica",12),fg="red",textvariable=sv3, width=10,validate="focusout", validatecommand=callbackPlayerName2Change)
+    eingabeSpielerZeichenZwei=Entry(HeaderFrame, font=("Helvetica",12),fg="red",textvariable=sv4, width=10,validate="focusout", validatecommand=callbackPlayerChar2Change)
+    
     eingabeSpielernameZwei.insert(END,TicTacToePlayer2.name)
     eingabeSpielernameZwei.grid(row=1,column=1)
-    eingabeSpielerZeichenZwei = Entry(HeaderFrame,font=("Helvetica",12),fg="red",width=10,textvariable=TicTacToePlayer2.char)
     eingabeSpielerZeichenZwei.insert(END,TicTacToePlayer2.char)
-    eingabeSpielernameZwei.config(state='disabled')
-    eingabeSpielerZeichenZwei.config(state='disabled')
+
     eingabeSpielerZeichenZwei.grid(row=1,column=2)
 
     #Variable um checkbox status zu checken
-    checkboxSpielerZweiEnabled = IntVar()
+    checkboxSpielerZweiEnabled = IntVar(value=1)
     checkpielerZwei = Checkbutton(HeaderFrame,text="Spieler 2 aktivieren",font=("Helvetica",12),command=checkEnableSpielernameZwei, variable=checkboxSpielerZweiEnabled)
     checkpielerZwei.grid(row=1,column=0)
 
@@ -217,20 +252,10 @@ AktuellerSpielerObjekt = TicTacToePlayer1
 
 CreateProgramStartLayout()
 
-CreateNewGameGuiLayout()
+#CreateNewGameGuiLayout()
 app=Application(master=root)
 app.mainloop()
 
 
-#res = db=DB()
-#app=Application(master=root)
-#w = Label(root, text="Tic Tac Toe!")
-#w.pack()
-#button1 = Button(root, text = "Klick mich an").place(x=20,y=30,width = 100, height = 100)
-#btnTime =  Button(root,text="1",bg="yellow",fg="blue",font=("Helvetica",32), command=aktion)
-#btnTime.pack()
-
-#resuuuult = db.schreibeDB("a","b")
-#result = db.leseDB()
 
 
